@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+
+   	<route id="emailToBonita">
+		<from uri="imaps://<imapHost>:<imapPort>?username=<emailAccount>&amp;password=<emailPassword>&amp;searchTerm.unseen=true&amp;searchTerm.subject=<emailSubject>" />
+		<to uri="extractFromMail" />
+		<to uri="log:org.bonitasoft.esb.demo?level=INFO" />
+		<to
+			uri="bonita:startCase?hostname=<bonitaServerHost>&amp;port=<bonitaServerPort>&amp;processName=<processName>&amp;username=<technicalUserName>&amp;password=<technicalUserPassword>" />
+	</route>
+
+  </camelContext>
+  <bean id="extractFromMail" class="org.bonitasoft.demo.esb.ExtractFromMail" />
+
+</beans>
